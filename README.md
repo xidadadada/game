@@ -1,2 +1,2 @@
-# movie
-hot movie 
+# edu
+hot edu 
