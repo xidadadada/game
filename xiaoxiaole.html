@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="telephone=no, email=no" name="format-detection">
+	<!-- 引入公共头部 -->
+	<!-- 页面标题 -->
+<title>旺旺消消乐</title>
+
+<!-- facebook分享开放图谱 -->
+
+
+<!-- 听云监控 -->
+<script type="text/javascript">
+var script = document.createElement('script');
+script.src = "//24haowan-cdn.shanyougame.com/public/js/tingyun-rum.js";
+document.getElementsByTagName('head')[0].appendChild(script);
+</script>
+
+<script type="text/javascript">
+	//修改fontSize
+	var container_width = 300;
+	function changeHTML() {
+		var width = window.innerWidth;
+		if (width > 700) {
+			container_width = window.innerWidth*0.234;
+			container_width = (container_width < 300) ? 300 : container_width;
+			var size = container_width*100/375;
+		} else {
+			var size = width*100/375;
+		}
+		document.querySelector('html').style.fontSize = size+'px';
+	}
+	changeHTML();
+</script>
+
+<!-- 通用JS -->
+<script src="//24haowan-cdn.shanyougame.com/public/js/loghub-tracking.js"></script>
+<script src="//24haowan-cdn.shanyougame.com/public/js/zepto.js"></script>
+<script src="//24haowan-cdn.shanyougame.com/public/js/jquery.md5.min.js"></script>
+<script src="//24haowan-cdn.shanyougame.com/public/js/zepto.qrcode.min.js"></script>
+<script src="//24haowan-cdn.shanyougame.com/public/js/vue.min.js"></script>
+<script src="//24haowan-cdn.shanyougame.com/public/js/vue-tap.min.js"></script>
+<script src="//res.cdn.24haowan.com/24haowan/js/t/vue-transition.js?v=1518300471"></script>
+<script src="//res.cdn.24haowan.com/24haowan/js/t/log.js"></script>
+<script src="//res.cdn.24haowan.com/24haowan/js/t/custom/third-login-iframe.js?v=1518300471"></script>
+<!-- 引入封装了failback的接口--initGeetest -->
+<script src="//static.cdn.24haowan.com/24-dev/js/gt.min.js"></script>
+
+<!-- 使用sentry做错误检测 -->
+<!-- <script src="//24haowan-cdn.shanyougame.com/public/js/raven.min.js"></script>
+	<script>
+		Raven.config('https://2f49e0645e12476babe8092361fa8bfa@sentry.io/113778').install();
+		Raven.setUserContext({
+	    user_id: "",
+	});
+	</script> -->
+
+<!-- 通用样式 -->
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/t/layout.css?v=1518300471">
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/webCustom/24haowan-ui.css?v=1518300471">
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/t/reset.css?v=1518300471">
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/t/startGame.css?v=1518300471">
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/t/score.css?v=1518300471">
+
+<!-- 动画样式 -->
+<link rel="stylesheet" href="//24haowan-cdn.shanyougame.com/public/css/animate.min.css">
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/t/animation.css?v=1518300471">
+
+<!-- 滑动器样式 -->
+<link rel="stylesheet" href="//24haowan-cdn.shanyougame.com/public/css/swiper.min.css">
+<script src="//24haowan-cdn.shanyougame.com/public/js/swiper.jquery.min.js"></script>
+
+<!-- 测试模式 -->
+
+<!-- GA统计信息 -->
+<script>
+    // Google Analytics
+    (function(i,s,o,g,r,a,m) {
+        i['GoogleAnalyticsObject']=r;
+        i[r]=i[r] || function () {
+            (i[r].q=i[r].q||[]).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];
+        a.async=1;
+        a.src=g;
+        m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//static.cdn.24haowan.com/analytics/google-analytics.js','ga');
+    ga('create', 'UA-80261581-1', 'auto');
+    ga('send', 'pageview'); 
+</script>
+
+<!-- requirejs -->
+<script src="//24haowan-cdn.shanyougame.com/public/js/require.min.js"></script>
+<script>
+var version = "15183004717";
+var basicUrl = "//res.cdn.24haowan.com/24haowan";
+// 判断是否app嵌入，user_appid存在且wx_third_login为0则说明是app嵌入，isAPP为true；其他情况为false
+var isAPP = false;
+requirejs.config({
+    baseUrl: basicUrl+"/js/",
+    paths: {
+    	base: basicUrl+"/js/t",
+        p: "t/modules/public",
+        page: "t/modules/public/page",
+        modal: "t/modules/public/modal",
+        mask: "t/modules/public/mask",
+        game: "t/modules/public/game",
+        jquery: "//24haowan-cdn.shanyougame.com/public/js/jquery.min"
+    },
+    urlArgs: "v=" + (isAPP ? (new Date().getTime()) : version)
+});
+</script>
+</head>
+<body>
+	<div class="game-tpl-container">
+		<!-- 全民消你妹 分数类 Phaser -->
+		
+<!-- ******************** 测试地址选择角色 ******************** -->
+
+
+<!-- ******************** 通用弹窗 ******************** -->
+
+<!-- 获得普通奖品 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-get-prize" data-name="getPrize" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">获得奖品</div>
+		<div class="modal-body">
+			<div class="text">已获得奖品，点击立即领取</div>
+			<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-prize.png" alt="" v-tap.prevent="getGift">
+		</div>
+	</div>
+</div>
+
+<!-- 获得抽奖机会 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-lottery" data-name="lottery" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">获得抽奖机会</div>
+		<div class="modal-body">
+			<div class="text">恭喜你获得一次抽奖机会!<br>点击礼盒看看运气如何~</div>
+			<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-prize.png" alt="" v-tap.prevent="lottery">
+		</div>
+	</div>
+</div>
+
+<!-- 抽中奖品 -->
+<!--<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-win-prize" data-name="winPrize" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">恭喜您获得了</div>
+		<div class="modal-body">
+			<img :src ="currentGiftImg" alt="" v-tap.prevent="winPrize">
+			<p>{{currentGiftName}}</p>
+		</div>
+	</div>
+</div>-->
+
+<!-- 没有抽到奖品 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-get-prize-none" data-name="getPrizeNone" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">很遗憾，没有获得奖品</div>
+		<div class="modal-body">
+			<img src="//24haowan-cdn.shanyougame.com/public/images/t/cry.png" alt="" :style="'padding-bottom:'+(showShare ? '10px' : '20px')">
+			<span class="gift-remind" v-show="showShare">炫耀即可获得一次抽奖机会噢！</span>
+			<div class="deputy-color deputy-btn gift-remind-btn" v-show="showShare" v-tap.prevent="share">炫耀一下</div>
+			<div class="close-btn main-color main-btn" v-tap.prevent="hide">关闭</div>
+		</div>
+	</div>
+</div>
+
+<!-- 奖品为空时的提示（只有分享、参与即可获奖） -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-get-prize-empty" data-name="getPrizeEmpty" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">奖品发放完毕提示</div>
+		<div class="modal-body">
+			<img src="//24haowan-cdn.shanyougame.com/public/images/t/cry.png" alt="">
+			<span>{{ text }}</span>
+			<div class="close-btn main-color main-btn" v-tap.prevent="hide">关闭</div>
+		</div>
+	</div>
+</div>
+
+<!-- 获得红包 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-giftmoney" data-name="giftmoney" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">获得红包</div>
+		<div class="modal-body">
+			<div class="text">恭喜你获得红包!</div>
+			<img :src="'//24haowan-cdn.shanyougame.com/public/images/t/giftmoney-'+type+'.png'" alt="" v-tap.prevent="getGiftmoney">
+		</div>
+	</div>
+</div>
+
+<!-- 消息提示框 -->
+<div v-show="show" transition="fade" id="modal-message" v-cloak>
+	<div class="message-box">{{ text }}</div>
+</div>
+
+<!-- 加载提示框 -->
+<div v-show="show" transition="fade" id="modal-loading" v-cloak>
+	<div class="loading-cnt">
+		<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-loading.gif" alt="" class="loading">
+	</div>
+</div>
+
+<!-- 请求失败提示框 -->
+<div v-show="show" transition="fade" id="modal-submit-error" v-cloak>
+	<div class="cnt">
+		<div class="text-container">
+			<div class="title">提示</div>
+			<div class="text">网络连接失败，请检查你的网络设置</div>
+		</div>
+		<div class="btn-container">
+			<div class="cancel" v-tap.prevent="back">返回</div>
+			<div class="confirm" v-tap.prevent="retry">重试</div>
+		</div>
+	</div>
+</div>
+
+<!-- 活动过期提示框 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-outdate" data-name="outdate" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">活动过期提示</div>
+		<div class="modal-body">
+			<div class="text">{{ text }}</div>
+			<div class="close-btn main-color main-btn" v-tap.prevent="hide">知道了</div>
+		</div>
+	</div>
+</div>
+
+<!-- 分数提交异常提提示框 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-score-error" data-name="scoreError" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">分数提交异常提示</div>
+		<div class="modal-body">
+			<div class="text">{{scoreErrorText?scoreErrorText:'您的分数存在异常，提交的分数暂时无法保存，我们需要人工审核，如有疑问请联系活动主办方。'}}</div>
+			<div class="close-btn main-color main-btn" v-tap.prevent="hide">知道了</div>
+		</div>
+	</div>
+</div>
+
+<!-- 最好成绩提示框 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-record" data-name="record" v-tap.prevent="hide" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">新最好成绩</div>
+		<div class="modal-body">
+			<div class="record-score-container">
+				<img src="//24haowan-cdn.shanyougame.com/public/images/t/bg-score.png" alt="">
+				<span class="score-num">{{ score }}</span>
+			</div>
+			<div class="close-btn share main-color main-btn" v-tap.prevent="share">{{ btnText }}</div>
+		</div>
+	</div>
+</div>
+
+<!-- 次数提示框（抽奖类游戏才会出现） -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-times" data-name="times" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">抽奖次数用完提示</div>
+		<div class="modal-body">
+			<div class="text">抱歉，您的抽奖次数已用完</div>
+			<div class="text remind" v-show="addChance">炫耀即可获得一次抽奖机会噢！</div>
+			<div class="close-btn main-color main-btn" v-tap.prevent="hide">知道了</div>
+		</div>
+	</div>
+</div>
+
+<!-- 确认兑奖提示框 -->
+<div v-show="show" transition="fade" id="modal-check-gift" v-cloak>
+	<div class="cnt">
+		<div class="text-container">
+			<div class="title">确认兑奖</div>
+			<div class="text">确认兑奖将会把奖品券状态置为已使用状态。</div>
+            <div class="text">请在您的销售人员面前<span class="warn">当面确认</span>核销，以免无法兑奖</div>
+		</div>
+		<div class="btn-container">
+			<div class="confirm" v-tap.prevent="confirm">确认兑奖</div>
+			<div class="cancel" v-tap.prevent="hide">取消</div>
+		</div>
+	</div>
+</div>
+
+<!-- 抽奖消耗积分确认弹窗 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-lottery-confirm" data-name="lotteryConfirm" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">提示</div>
+		<div class="modal-body">
+			<div class="text">抽奖需要消耗{{ pointNumber }}积分哦，确认是否继续？</div>
+			<div class="confirmBtn">
+				<span class="confirm" v-tap.prevent="confirm">确&nbsp;认</span><span class="cancel" v-tap.prevent="hide">取&nbsp;消</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 积分不够提示框 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-insufficient-integral" data-name="insufficientIntegral" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">提示</div>
+		<div class="modal-body">
+			<div class="text">您的积分不够哦！</div>
+			<span class="closeBtn" v-tap.prevent="hide">知道了</span>
+		</div>
+	</div>
+</div>
+
+<!-- 通知 有未领取的奖品 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-get-prize-unclaimed" data-name="getPrizeUnclaimed" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">获得奖品</div>
+		<div class="modal-body">
+			<div class="text">您有未领取的奖品!<br>快去奖品中心领取吧！~</div>
+			<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-prize.png" alt="" v-tap.prevent="getGift">
+		</div>
+	</div>
+</div>
+
+<!-- 通知 领奖失败通知 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-get-award-error" data-name="getAwardError" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">领奖失败</div>
+		<div class="modal-body">
+			<div class="text">
+    			<p>恭喜您获得这个奖品。但<span style="max-width: 1.8rem;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: inline-block;margin: 0;vertical-align: top;">{{ getAwardErrorMsg }}</span>，导致发放失败！</p>
+    			<p>如有疑问请联系活动举办方<br>联系方式：{{ ActivityNumber }}</p> 
+			</div>
+			<div class="close-btn main-color main-btn" v-tap.prevent="hide">关闭</div>
+		</div>
+	</div>
+</div>
+
+<!-- 通知 上榜后确认订阅通知 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-confirm-subscription-ranking" data-name="confirmSubscriptionRanking" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">上榜提示</div>
+		<div class="modal-body">
+            <div class="text">
+                哇哦，您目前的排名秒杀众生啦，但革命尚未成功，可能一不小心就被人挤下来啦<br>
+                ~~~~(>_<)~~~~
+            </div>
+            <div class="text">
+                建议您收藏此页面随时查看排行变化情况哦！
+            </div>
+    		<div class="btn-container">
+    			<div class="confirm main-btn main-color main-border" v-tap.prevent="confirm">订阅获奖通知</div>
+    			<div class="cancel" v-tap.prevent="cancel">不用了</div>
+    		</div>
+		</div>
+	</div>
+</div>
+
+<!-- 通知 助力后确认订阅通知 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-confirm-subscription-help" data-name="confirmSubscriptionHelp" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">助力已成功发起</div>
+		<div class="modal-body">
+            <div class="text">
+                恭喜您完成助力第一步，大奖离您越来越近了呢(☆▽☆)<br>
+            </div>
+            <div class="text">
+                建议您收藏本页面实时查看自己的助力状态哦！
+            </div>
+    		<div class="btn-container">
+    			<div class="confirm main-btn main-color main-border" v-tap.prevent="confirm">订阅获奖通知</div>
+    			<div class="cancel" v-tap.prevent="cancel">不用了</div>
+    		</div>
+		</div>
+	</div>
+</div>
+
+<!-- 通知 订阅获奖通知 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-subscription" data-name="subscription" v-cloak>
+	<div class="modal-cnt modalAnimated" v-show="showContent" transition="modalZoom">
+		<div class="modal-title">订阅获奖通知</div>
+		<div class="modal-body">
+            <div class="text">
+                我们会在您获奖时推送短信消息给您~
+            </div>
+            <div class="phone">
+                <img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-notify-phone.png" alt="电话">
+                <input type="tel" placeholder="请输入手机号码" v-model="phoneNum" @keyup="check">
+            </div>
+            <div :class="classObject">{{ msg }}</div>
+    		<div class="btn-container">
+    			<div class="confirm main-btn main-color main-border" v-tap.prevent="confirm">确定</div>
+    			<div class="cancel" v-tap.prevent="cancel">取消</div>
+    		</div>
+		</div>
+	</div>
+</div>
+
+<!-- 通知 订阅获奖通知成功提示 -->
+<div class="modal-container modalAnimated" v-show="show" transition="modalFade" id="modal-subscription-success" data-name="subscriptionSuccess" v-cloak>
+	<div class="cnt" v-show="showContent">
+		<div class="text-container">
+			<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-notify-tick.png" alt="">
+			<div class="text">提交成功</div>
+            <div class="text">如您获奖，我们将第一时间通知您~</div>
+		</div>
+	</div>
+</div>
+
+<!-- ******************** 活动规则、报名信息、排行榜、奖品中心、奖品详情 ******************** -->
+<div id="data-version" data-version="2">
+<div id="data-is-send-gift" data-is-send-gift="no">
+<link rel="stylesheet" href="//res.cdn.24haowan.com/24haowan/css/t/page-v2.css?v=1518300471">
+
+<!-- 悬浮按钮 -->
+<div class="btn-page bling" id="btn-page" v-show="show" v-cloak :style='bg'>
+	<span class="toread-num" :class="toRead.length > 0 ? '' : 'hidden'">{{ toRead.length }}</span>
+</div>
+
+<!-- 信息中心 -->
+<div class="page-container animated transition-none" v-show="show" v-cloak>
+	<div class="top">
+		<img class="page-icon" :src="currentIcon" alt="">
+		<div class="page-title" v-show="nav[currentPage] != '排行榜' || tplId !== 55 || tplId !== 114">{{ getTitleText() }}</div>
+        <!-- 集字排行榜 -->
+        <div class="page-title" v-show="nav[currentPage] == '排行榜' && (tplId === 55 || tplId === 114)">{{ nav[currentPage] + '（集满时间）'}}</div>
+		<img class="page-close" v-show="enableClose" v-tap.prevent="hide" src="//24haowan-cdn.shanyougame.com/public/images/t/icon-close-light.png" alt="">
+	</div>
+	<div class="center" :class="nav[currentPage] == '排行榜' ? 'noscroll' : ''">
+		<!-- 活动规则 -->
+		<div class="page-activity-text" v-show="nav[currentPage] == '活动规则' || nav[currentPage] == 'Terms & Conditions'">
+			<template v-if="gameInfo.tpl_id != 77">
+				<h3 class="page-activity-time">
+                    <!-- <img class="page-activity-banner" src="//static.cdn.24haowan.com/img/22424/22424151003779515288.png" alt=""> -->
+                    <span>活动时间</span>
+                </h3>
+				<p>{{ activityTime }}</p>
+			</template>
+			<h3 class="page-activity-rule">
+                <span>活动规则</span>
+            </h3>
+			<p class="page-activity-ruleText">{{ gameConfig["text"]['activity-text'] }}</p>
+			<template v-if="gameInfo.tpl_id == 12">
+				<h3 class="page-activity-target">
+					<span>寻找目标</span>
+				</h3>
+				<img :src='gameConfig["platform"]["texture"]["man"][0]["url"]'>
+			</template>
+			<div class="activity-gift-text"></div>
+			<template v-if='!!gameInfo["m_name"]'>
+				<h3 class="mname">
+                    <span>商户名称</span>
+                </h3>
+				<p>{{ mName }}</p>
+			</template>
+			<div v-show="showActivityQrcode">
+				<h3 id="activity-qrcode">
+                    <span>公众号二维码</span>
+                </h3>
+				<img id='activity-qrcode-img' :src='activityQrcode' />
+				<p id="activity-qrcode-text">长按二维码关注</p>
+			</div>
+			<template v-if="gameInfo.tpl_id == 77 || gameInfo.game_id == 72515 || gameInfo.game_id == 66842">
+				<h3 class="gameInfo-support">技术支持</h3>
+				<p class="gameInfo-legal">由<span style='color:#1abc9c;'>24好玩</span>提供，技术支持方仅提供页面技术，不承担活动引起的相关法律责任。</p>
+			</template>
+			<div class="btn-report" v-tap="showReport">举报</div>
+			<div class="support-text" :class="supportStatic ? 'static' : ''" v-show="showSupport">{{ supportText }}</div>
+		</div>
+		<!-- 投票定制版个人中心页 -->
+		<div class="page-personal-center" v-if="gameInfo.tpl_id == 79" v-show="nav[currentPage] == '个人中心' || nav[currentPage] == 'Your Bag'">
+			<template v-if="gameInfo.tpl_id == 79">
+				<p>送鲜花达<span>{{ flowersTotalTimes }}</span>次或分享活动达<span>{{ shareTotalTimes }}</span>次，即可获得奖品哦~<br>每人每天最多可送鲜花3次、扔鸡蛋1次、分享3次。</p>
+				<div class="flowersBlock">
+					<p>送鲜花数（<i> {{ hasFlowersTimes }} </i>）</p>
+					<div class="flowersBlock__progress">
+						<div class="flowersBlock__progress--bar" :style="flowersBarWidth+';'+flowersBarColor"></div>
+						<p class="flowersBlock__progress--complete">奖品已领取</p>
+					</div>
+					<span>0</span>
+					<span> {{ flowersTotalTimes }} </span>
+				</div>
+				<div class="shareBlock">
+					<p>分享次数（<i>{{ hasShareTimes }}</i>）</p>
+					<div class="shareBlock__progress">
+						<div class="shareBlock__progress--bar" :style="shareBarWidth+';'+shareBarColor"></div>
+						<p class="shareBlock__progress--complete">奖品已领取</p>
+					</div>
+					<span>0</span>
+					<span>{{ shareTotalTimes }}</span>
+				</div>
+				<div class="paersonalRemain">参赛者和参与者奖品只能领取一个哦~</div>
+			</template>
+		</div>
+		<!-- 报名信息 -->
+		<div class="page-feedback" v-show="nav[currentPage] == '报名信息' || nav[currentPage] == 'Registration Messages' || (nav[currentPage] == '奖品中心' && !hasFromInfo_fuxing)">
+			<div class="desc">{{ gameConfig.message.msg.desc ? gameConfig.message.msg.desc : "为了便于活动的进行，请您填写以下信息，便于我们在您中奖后与您联系。" }}</div>
+			<template v-for="item in gameConfig.message.msg.list">
+				<div class="form-block" v-if="typeof item == 'string'">
+					<div class="label">{{ item }}</div>
+					<input @focus="onInputFocus" :type="(item.toUpperCase().indexOf('电话') > -1 || item.toUpperCase().indexOf('座机') > -1 || item.toUpperCase().indexOf('手机') > -1 || item.toUpperCase().indexOf('QQ') > -1) ? 'tel' : 'text'" data-name="{{ item }}" placeholder="请输入{{ item }}" v-model="feedbackData[item]">
+				</div>
+				<div class="phoneComponent" v-else>
+					<div class="form-block phone-block">
+						<div class="label">手机</div>
+						<input type="tel"
+							data-name="手机"
+							placeholder="请输入手机"
+							v-model="feedbackData['24hw_phone']"
+							@input="phoneLengthChange"
+							class="phone-input"
+							@focus="onInputFocus">
+					</div>
+					<div class="form-block authCode-block"
+						:class="typeof item == 'string' ? 'hidden' : ''">
+						<div class="label">验证</div>
+						<input type="text"
+							data-name="验证"
+							placeholder="请输入验证"
+							v-model="feedbackData['24hw_code']"
+							class="auth-code-input"
+							style="margin-right: 20px;"
+							@focus="onInputFocus">
+						<div class="auth-code__btn">{{ btnTxt }}</div>
+					</div>
+				</div>
+			</template>
+			<div class="main-color main-btn feedback-btn" v-tap="submitFeedback">提交</div>
+		</div>
+		<!-- 排行榜 -->
+		<div class="page-rank" v-show="nav[currentPage] == '排行榜' && showScoreRank">
+			<div class="rank-type-container">
+				<div v-tap="toggleRankType('friend')" :class="currentRankType == 'friend' ? 'active' : ''">好友 （<span class="number">{{ friendTotal }}</span>）</div>
+				<div v-tap="toggleRankType('all')" :class="currentRankType == 'all' ? 'active' : ''">全部 （<span class="number">{{ playerTotal }}</span>）</div>
+			</div>
+			<div class="rank-list" :class="initRank ? 'show' : ''">
+				<div class="rank-list-friend" :class="currentRankType == 'friend' ? '' : 'hidden'">
+					<div class="friendContent">
+						<!-- 自己的排名 -->
+						<div class="user">
+							<div class="rank-block">
+								<div class="rank" :style="getSelfRankIcon(friendUserRank.rank)"></div>
+								<!-- <div class="head" :style="'background-image:url('+ friendUserRank.headimgurl + ')'"> -->
+								<div class="head">
+                                    <img :src="friendUserRank.headimgurl.length > 3 ? friendUserRank.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'" alt="">
+                                    <div :style="getSelfRankHeadIcon(friendUserRank.rank)">
+										<span class="selfRank">{{ friendUserRank.rank < 4 ? '' : 'NO.' + friendUserRank.rank }}</span>
+									</div>
+                                </div>
+								<div class="nickname">
+                                    <i></i>
+                                    {{ friendUserRank.name }}
+                                </div>
+								<div class="score" v-if="friendUserRank.score !== undefined">{{ parseFloat(friendUserRank.score) }}</div>
+								<div class="score" v-else>{{ parseInt(friendUserRank.register_times) }}</div>
+							</div>
+						</div>
+						<!-- 好友的排名 -->
+						<template v-for="item in friendRankList">
+							<div class="rank-block">
+                                <div class="rank" :style="getRankIcon($index+1)">{{ $index+1 < 4 ? '' : $index+1 }}</div>
+                                <div class="head" :class="getRankHeadCss($index+1)">
+                                    <img :src="item.headimgurl.length > 3 ? item.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'">
+                                    <div :style="getRankHeadIcon($index+1);"></div>
+                                </div>
+								<!-- <div class="head" :style="'background-image:url('+ item.headimgurl + ')'"></div> -->
+								<div class="nickname">{{ item.name }}</div>
+								<div class="score" v-if="item.score !== undefined" :class="getScoreCss($index+1)">{{ parseFloat(item.score) }}</div>
+								<div class="score" v-else>{{ parseInt(item.register_times) }}</div>
+							</div>
+						</template>
+					</div>
+					<div class="more" data-num="1" data-touch="true" data-type="friend" v-tap="getMoreRank('friend')">查看更多</div>
+				</div>
+				<div class="rank-list-player"  :class="currentRankType == 'all' ? '' : 'hidden'">
+					<div class="playerContent">
+						<!-- 自己的排名 -->
+						<div class="user">
+							<div class="rank-block">
+								<div class="rank" :style="getSelfRankIcon(playerUserRank.rank)"></div>
+                                <!-- <div class="head" :style="'background-image:url('+ playerUserRank.headimgurl + ')'"></div> -->
+                                <div class="head">
+                                    <img :src="playerUserRank.headimgurl.length > 3 ? playerUserRank.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'" alt="">
+                                    <div :style="getSelfRankHeadIcon(playerUserRank.rank)">
+										<span class="selfRank">{{ playerUserRank.rank < 4 ? '' : 'NO.' + playerUserRank.rank }}</span>
+									</div>
+                                </div>
+								<div class="nickname">
+                                    <i></i>
+                                    {{ playerUserRank.name }}
+                                </div>
+								<div class="score" v-if="playerUserRank.score !== undefined">{{ parseFloat(playerUserRank.score) }}</div>
+								<div class="score" v-else>{{ parseInt(playerUserRank.register_times) }}</div>
+							</div>
+						</div>
+						<!-- 其他玩家的排名 -->
+						<template v-for="item in playerRankList">
+							<div class="rank-block">
+                                <div class="rank" :style="getRankIcon($index+1)">{{ $index+1 < 4 ? '' : $index+1 }}</div>
+                                <div class="head" :class="getRankHeadCss($index+1)">
+                                    <img :src="item.headimgurl.length > 3 ? item.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'">
+                                    <div :style="getRankHeadIcon($index+1);"></div>
+                                </div>
+								<!-- <div class="head" :style="'background-image:url('+ item.headimgurl + ')'"></div> -->
+								<div class="nickname">{{ item.name }}</div>
+								<div class="score" v-if="item.score !== undefined" :class="getScoreCss($index+1)">{{ parseFloat(item.score) }}</div>
+								<div class="score" v-else>{{ parseInt(item.register_times) }}</div>
+							</div>
+						</template>
+					</div>
+					<div class="more" data-num="1" data-touch="true" data-type="all" v-tap="getMoreRank('all')">查看更多</div>
+				</div>
+			</div>
+		</div>
+        <!-- 集字排行榜 -->
+		<div class="page-rank" v-show="nav[currentPage] == '排行榜' && showCollectionRank">
+			<div class="rank-type-container">
+				<div v-tap="toggleRankType('friend')" :class="currentRankType == 'friend' ? 'active' : ''">好友 （<span class="number">{{ friendTotal }}</span>）</div>
+				<div v-tap="toggleRankType('all')" :class="currentRankType == 'all' ? 'active' : ''">全部 （<span class="number">{{ playerTotal }}</span>）</div>
+			</div>
+			<div class="rank-list" :class="initRank ? 'show' : ''">
+				<div class="rank-list-friend" :class="currentRankType == 'friend' ? '' : 'hidden'">
+					<div class="friendContent">
+						<!-- 自己的排名 -->
+						<div class="user" v-show="friendUserRank.rank !== 0">
+							<div class="rank-block">
+								<!-- <div class="rank" :style="getSelfRankIcon(friendUserRank.rank)">{{ friendUserRank.rank < 4 ? '' : friendUserRank.rank }}</div> -->
+								<!-- <div class="head" :style="'background-image:url('+ friendUserRank.headimgurl + ')'"></div> -->
+								<div class="rank" :style="getSelfRankIcon(friendUserRank.rank)"></div>
+                                <div class="head">
+									<img :src="friendUserRank.headimgurl.length > 3 ? friendUserRank.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'" alt="">
+									<div :style="getSelfRankHeadIcon(friendUserRank.rank)">
+										<span class="selfRank">{{ friendUserRank.rank < 4 ? '' : 'NO.' + friendUserRank.rank }}</span>
+									</div>
+								</div>
+								<div class="nickname">
+									<i></i>
+									{{ friendUserRank.name }}
+								</div>
+								<div class="score score_time">{{ friendUserRank.finished_time.split(' ')[0] }}
+                                    <!-- <br> -->
+                                {{ friendUserRank.finished_time.split(' ')[1] }}
+                                </div>
+							</div>
+						</div>
+						<!-- 好友的排名 -->
+						<template v-for="item in friendRankList">
+							<div class="rank-block">
+								<div class="rank" :style="getRankIcon($index+1)">{{ $index+1 < 4 ? '' : $index+1 }}</div>
+								<div class="head" :class="getRankHeadCss($index+1)">
+                                    <img :src="item.headimgurl.length > 3 ? item.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'">
+                                    <div :style="getRankHeadIcon($index+1);"></div>
+                                </div>
+								<div class="nickname">{{ item.name }}</div>
+								<div class="score score_time"  :class="getScoreCss($index+1)">{{ item.finished_time.split(' ')[0] }}<br>{{ item.finished_time.split(' ')[1] }}
+                                </div>
+							</div>
+						</template>
+					</div>
+					<div class="more" data-num="1" data-touch="true" data-type="friend" v-tap="getMoreRank('friend')">查看更多</div>
+				</div>
+				<div class="rank-list-player"  :class="currentRankType == 'all' ? '' : 'hidden'">
+					<div class="playerContent">
+						<!-- 自己的排名 -->
+						<div class="user" v-show="playerUserRank.rank !== 0">
+							<div class="rank-block">
+								<div class="rank" :style="getSelfRankIcon(playerUserRank.rank)"></div>
+								<!-- <div class="head" :style="'background-image:url('+ playerUserRank.headimgurl + ')'"></div> -->
+								<div class="head">
+                                    <img :src="playerUserRank.headimgurl.length > 3 ? playerUserRank.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'" alt="">
+                                    <div :style="getSelfRankHeadIcon(playerUserRank.rank)">
+										<span class="selfRank">{{ playerUserRank.rank < 4 ? '' : 'NO.' + playerUserRank.rank }}</span>
+									</div>
+                                </div>
+								<div class="nickname">
+                                    <i></i>
+                                    {{ playerUserRank.name }}
+                                </div>
+								<!-- <div class="nickname">{{ playerUserRank.name }}</div> -->
+                                <div class="score score_time">{{ friendUserRank.finished_time.split(' ')[0] }}
+                                    <!-- <br> -->
+                                {{ friendUserRank.finished_time.split(' ')[1] }}
+                                </div>
+							</div>
+						</div>
+						<!-- 其他玩家的排名 -->
+						<template v-for="item in playerRankList">
+							<div class="rank-block">
+								<div class="rank" :style="getRankIcon($index+1)">{{ $index+1 < 4 ? '' : $index+1 }}</div>
+								<!-- <div class="head" :style="'background-image:url('+ item.headimgurl + ')'"></div> -->
+								<div class="head" :class="getRankHeadCss($index+1)">
+                                    <img :src="item.headimgurl.length > 3 ? item.headimgurl : '//img-2.24haowan.shanyougame.com/player_headimg/-2.jpg'">
+                                    <div :style="getRankHeadIcon($index+1);"></div>
+                                </div>
+								<div class="nickname">{{ item.name }}</div>
+                                <div class="score score_time" :class="getScoreCss($index+1)">{{ item.finished_time.split(' ')[0] }}<br>{{ item.finished_time.split(' ')[1] }}
+                                </div>
+							</div>
+						</template>
+					</div>
+					<div class="more" data-num="1" data-touch="true" data-type="all" v-tap="getMoreRank('all')">查看更多</div>
+				</div>
+			</div>
+		</div>
+		<!-- 录音记录 -->
+		<div class="page-myRecord" v-show="nav[currentPage] == '录音记录'">
+			<div class="myRecord-list-th">
+				<div class="th-container">
+					<div class="item">发布时间</div>
+					<div class="item">录音状态</div>
+					<div class="item">收听人数</div>
+				</div>
+			</div>
+			<div class="myRecord-list-container">
+				<div class="myRecord-list-item" v-for="item in recordList" v-tap="showRecord" :index="$index">
+					<div class="item-container">
+						<div class="item">{{ item.create_time.substr(0, 16) }}</div>
+						<div class="item">{{ item.record_time }}</div>
+						<div class="item">{{ item.viewer }}</div>
+					</div>
+					<img class="item-sign" src="//24haowan-cdn.shanyougame.com/public/images/t/greaterThanSign.png">
+				</div>
+			</div>
+		</div>
+		<!-- 助力排行榜 -->
+		<div class="page-cd-rank" v-show="nav[currentPage] == '排行榜' && showCdRank">
+			<div class="rank-type-container">
+				<div v-tap="toggleCDRankType('total')" :class="currentCDRankType == 'total' ? 'active' : ''">总排行榜 （<span class="number">{{ CDCount.total }}</span>）</div>
+				<div v-tap="toggleCDRankType('target')" :class="currentCDRankType == 'target' ? 'active' : ''">达成目标 （<span class="number">{{ CDCount.target }}</span>）</div>
+			</div>
+			<div class="content" data-type="total" :class="currentCDRankType == 'total' ? '' : 'hidden'">
+				<div class="cd-rank-block self">
+					<div class="rank">{{ userCDRank.total.rank || '-' }}</div>
+					<img :src="userCDRank.total.headimgurl">
+					<div class="name">{{ userCDRank.total.name }}</div>
+					<div class="data">{{ userCDRank.total.cd_info ? (userCDRank.total.cd_info.total || '-') : '-' }}</div>
+				</div>
+				<div class="cd-rank-total-container">
+					<div class="cd-rank-total">{{ CDCount.total }}位发起者</div>
+				</div>
+				<div class="cd-rank-th">
+					<div class="rank">排名</div>
+					<div class="name">发起者</div>
+					<div class="data" v-if="tplId !== 55 && tplId !== 114">进度</div>
+					<div class="data" v-else>进度</div>
+				</div>
+				<template v-for="item in CDRankList.total">
+					<div class='cd-rank-block'>
+						<div class='rank'>{{ $index+1 }}</div>
+						<img :src='item.headimgurl'>
+						<div class='name'>{{ item.name }}</div>
+						<div class='data'>{{ item.total || '-' }}</div>
+					</div>
+				</template>
+				<div class="cd-rank-more-container" data-type="total">
+					<div class="cd-rank-more" data-type="total" v-tap="getMoreCDRank('total')">查看更多</div>
+				</div>
+			</div>
+			<div class="content" data-type="target" :class="currentCDRankType == 'target' ? '' : 'hidden'">
+				<div class="cd-rank-block self">
+					<div class="rank">{{ userCDRank.target.rank || '-' }}</div>
+					<img :src="userCDRank.target.headimgurl">
+					<div class="name">{{ userCDRank.target.name }}</div>
+					<div class="data">{{ userCDRank.target.cd_info ? (userCDRank.target.cd_info.end_goal_time ? userCDRank.target.cd_info.end_goal_time.substr(5, 11) : '-') : '-' }}</div>
+				</div>
+				<div class="cd-rank-total-container">
+					<div class="cd-rank-total">{{ CDCount.target }}位达成者</div>
+				</div>
+				<div class="cd-rank-th">
+					<div class="rank">排名</div>
+					<div class="name">发起者</div>
+					<div class="data">达成时间</div>
+				</div>
+				<template v-for="item in CDRankList.target">
+					<div class='cd-rank-block'>
+						<div class='rank'>{{ $index+1 }}</div>
+						<img :src='item.headimgurl'>
+						<div class='name'>{{ item.name }}</div>
+						<div class='data'>{{ item.end_goal_time ? item.end_goal_time.substr(5, 11) : '-' }}</div>
+					</div>
+				</template>
+				<div class="cd-rank-more-container" data-type="target">
+					<div class="cd-rank-more" data-type="target" v-tap="getMoreCDRank('target')">查看更多</div>
+				</div>
+			</div>
+		</div>
+		<!-- 奖品中心 -->
+		<div class="page-gift" v-show="(nav[currentPage] == '奖品中心' || nav[currentPage] == 'Your Prize Bag') && hasFromInfo_fuxing ">
+			<div class="gift-item-container">
+				<div class="gift-item-block" :class="item.read == 'no' ? 'not-read' : ''" v-for="item in giftData" data-name="{{ item.id }}" v-tap="sendReadGift($event, $index)">
+					<img src="//img-2.24haowan.shanyougame.com/img/946/946150952423184028.png">
+    				<div class="gift-item-img" :style='`background-image:url("${item.gift_img}")`'></div>
+    				<div class="gift-item-info">
+    					<div>
+	    					<div class="gift-item-name">{{ item.gift_name }}</div>
+	    					<div class="gift-item-check" :class="item.check == 'yes' ? '' : 'hidden'"><span>已核销</span></div>
+    					</div>
+					</div>
+					<div class="gift-item-text" data-status="{{ item.gift_record_id }}" :class="{hidden: !item.other_gift_send, fail: item.other_gift_send=='no'}">{{ item.other_gift_send=="yes" ? '已发奖' : '发奖失败' }}</div>
+    				<div class="gift-item-btn-detail" data-name="{{ item.gift_record_id }}" v-tap="showGiftDetail">{{ item.other_gift_send && item.other_gift_send=="no" ? '领取' : '查看详情' }}</div>
+    			</div>
+			</div>
+			<div class="empty-container" :class="giftData.length > 0 ? '' : 'show'">
+                <img src="//img-2.24haowan.shanyougame.com/img/22424/22424150951739588043.png">
+                还没有获得奖品哦ヾ (o ° ω ° O )
+            </div>
+			<!-- <a class="gift-link" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2OTQzNzM3NQ==#wechat_redirect" v-show="gameInfo.game_id != 44291 && gameInfo.game_id != 44346">- 更多奖品，进入小游戏福利社 -</a> -->
+		</div>
+	</div>
+	<div class="bottom" :class="navShow ? '' : 'hidden'">
+		<template v-for="item in nav">
+			<div :class="currentPage == $index ? 'active' : ''" v-tap.prevent="toggleNav($index)" v-show="!(nav[$index] == '报名信息' && (gameInfo.game_id == 456473062 || gameInfo.game_id == 773719229  || gameInfo.game_id == 457976084 || gameInfo.game_id == 1407496243 || gameInfo.game_id == 247648536 || gameInfo.game_id == 464201081 || gameInfo.game_id == 825858586))"><span :class="nav[$index] == '奖品中心' && toRead ? 'not-read' : ''">{{ getItemText(item) }}</span></div>
+		</template>
+	</div>
+</div>
+
+<!-- 举报 -->
+<div class="report-container animated" v-show="show" transition="slide" v-cloak>
+	<div class="text">请选择投诉原因</div>
+	<div class="reason-block-container">
+		<template v-for="item in reasons">
+			<div class="reason-block" :class="currentReason == $index ? 'active' : ''" v-tap="select($index)">{{ item }}</div>
+		</template>
+	</div>
+	<div class="text">您的邮箱地址（可选）</div>
+	<input type="email" placeholder="请输入邮箱地址" v-model="email">
+	<div class="btn-container">
+		<div class="btn-submit" v-tap.prevent="submitReport">提交</div>
+		<div class="btn-back" v-tap.prevent="hide">返回</div>
+	</div>
+	<div class="remind" v-show="showContact">如有需要也可以加微信hellomiao12345联系我们</div>
+</div>
+<!-- 录音记录详情 -->
+<div class="record-container animated" v-show="show" transition="slide" v-cloak>
+	<div class="body">
+		<div class="custom-container">
+			<div class='game-share-text-div'>已有{{ viewer }}人听过这条录音</div>
+			<div class='recorder'>
+		        <img src='//24haowan-cdn.shanyougame.com/recorder/assets/imgs/turntable_left.png' alt='磁带的左圈'  class='turntable-left turntable'/>
+		        <img src='//24haowan-cdn.shanyougame.com/recorder/assets/imgs/turntable_right.png' alt='磁带的右圈'  class='turntable-right turntable'/>
+		  	</div>
+		  	<div class='game-share-btns-div'>
+		  		<ul class='btns-ul'>
+		  			<li class='btns-li'>
+		  				<a href='javascript:;' class='share-play aBtn' v-show="musicBtn" v-tap.prevent="recordPlay">
+		  					<img class='btn-img' src='//24haowan-cdn.shanyougame.com/recorder/assets/imgs/play.png' alt='播放'/>
+		  				</a>
+		  				<a href='javascript:;' class='share-stop-play aBtn' v-show="!musicBtn" v-tap.prevent="recordStop">
+		  					<img class='btn-img' src='//24haowan-cdn.shanyougame.com/recorder/assets/imgs/stop.png' alt='停止'/>
+		  				</a>
+		  			</li>
+		  		</ul>
+		  	</div>
+		</div>
+		<div class="btn-container">
+			<div class="game-btn deputy-color deputy-btn" v-if="showLottery" v-tap.prevent="lottery">{{ btnLotteryText }}</div>
+			<div class="game-btn main-color main-btn" v-tap.prevent="replay">{{ btnChallengeText }}</div>
+		</div>
+	</div>
+</div>
+<!-- 奖品详情 -->
+<div class="gift-detail-container animated" v-show="show" transition="slide" v-cloak>
+	<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-back.png" class="btn-close" v-tap.prevent="hide">
+	<div class="content" :class="giftData.showGiftQrcode ? 'showGiftQrcode' : ''">
+		<div class="gift-head" :class="getStyle()">
+			<div class="gift-img" :style='`background-image:url("${giftData.gift_img}")`'></div>
+			<!-- <img :src="giftData.gift_img" class="gift-img"> -->
+			<div class="gift-name">{{ giftData.gift_name }}</div>
+			<div class="gift-name" style="margin-top: 5px" v-if="giftData.point">{{ giftData.point }}积分</div>
+			<div class="gift-remind">{{ giftRemind }}</div>
+		</div>
+		<div class="gift-detail" :class="currentStatus == 'wait' ? 'hidden' : ''">
+			<div class="qrcode-block" :class="giftData.showGiftQrcode ? '' : 'hidden'">
+                <span class="label gift-desc-label">兑换码</span>
+				<div class="qrcode-text"><span :class="giftData.subscribe_rp == 'yes' ? 'red' : ''">{{ giftData.code }}</span></div>
+				<div id="btn-gift-qrcode" :class="giftData.showGiftQrcodeBtn ? '' : 'hidden'" v-tap="showGiftCode">点击查看兑换二维码</div>
+			</div>
+			<div class="other-qrcode-block" :class="(giftData.other_gift_ext_info && JSON.parse(giftData.other_gift_ext_info).cd_key) ? '' : 'hidden'">
+                <span class="label gift-desc-label">兑换码</span>
+				<div class="qrcode-text"><span :class="giftData.subscribe_rp == 'yes' ? 'red' : ''">{{ cd_key }}</span></div>
+			</div>
+			<div class="qrcode-block gift-check-way" :class="giftData.check_way == 4 ? 'show' : ''" name="pass">
+				<div class="qrcode-text">淘口令</div>
+				<span class="gift-pass">{{ checkInfo.pass }}</span>
+			</div>
+			<div class="gift-detail-block">
+				<span class="label gift-desc-label">兑奖说明</span>
+				<span class="gift-desc" :class="((giftData.rp_type == 2 || giftData.rp_type == 3) && (giftData.subscribe_rp == 'yes' || giftData.subscribe_gift == 'yes')) ? 'red' : ''">{{ desc }}</span>
+			</div>
+			<div class="gift-detail-block gift-check-way" :class="((giftData.rp_type == 2 || giftData.rp_type == 3) && (giftData.subscribe_rp == 'yes' || giftData.subscribe_gift == 'yes')) ? 'show' : ''" name="subscribe-qrcode">
+				<img :src="gzQrcode" alt="" class="gift-qrcode">
+			</div>
+			<div class="gift-detail-block gift-check-way" :class="giftData.check_way == 1 ? 'show' : ''" name="offline">
+				<span class="label">领取地址</span>
+				<span class="gift-address">{{ checkInfo.address }}</span>
+			</div>
+			<div class="gift-detail-block gift-check-way" :class="giftData.check_way == 1 ? 'show' : ''" name="offline">
+				<span class="label">联系电话</span>
+				<span class="gift-phone">{{ checkInfo.phone }}</span>
+			</div>
+			<div class="gift-detail-block gift-check-way" :class="giftData.check_way == 3 ? 'show' : ''" name="qrcode">
+                <!-- <div>关注公众号领取奖品</div> -->
+                <span class="label game-qrcode-label">
+                    <p>关注公众号<br>领取奖品</p>
+                </span>
+				<img :src="checkInfo.qrcode" alt="" class="gift-qrcode">
+			</div>
+			<div class="gift-detail-block">
+				<span class="label game-name-label">活动名称</span>
+				<span class="game-name">{{ gameName }}</span>
+			</div>
+			<div class="gift-detail-block">
+				<span class="label gift-get-time-label">获奖时间</span>
+				<span class="gift-get-time">{{ giftData.create_time.slice(0, 16) }}</span>
+			</div>
+			<div class="gift-detail-block gift-check-way" :class="giftData.check_way == 5 && giftData.check == 'yes' ? 'show' : ''" name="self">
+				<span class="label">兑奖时间</span>
+				<span class="gift-check-time">{{ giftData.check_time.slice(0, 16) }}</span>
+			</div>
+		</div>
+		<div class="bottom-container" :class="currentStatus == 'wait' ? 'hidden' : ''">
+    		<div class="desc hidden">活动结束后，我们将会主动与你联系发放活动奖品。</div>
+			<template v-if="giftData.check == 'yes'">
+				<a class="bottom-btn show" :class="giftData.check_way == 5 ? 'disabled' : 'verified'">{{ giftData.check_way == 5 ? '已使用' : '已核销' }}</a>
+			</template>
+			<template v-else>
+				<a class="bottom-btn" :class="[giftData.check_way == 2 && giftData.status == 'recive' ? 'show' : '']" :href="checkLink">{{ bottomBtnText }}</a>
+				<a class="bottom-btn" :class="[giftData.check_way == 5 ? 'show' : '']" @click="toCheckGift">{{ bottomBtnText }}</a>
+			</template>
+		</div>
+		<div class="wait-container" :class="currentStatus == 'wait' ? 'show' : ''">
+			<div class="title">关注公众号回复“<span>领奖</span>”领取奖品，<br>重新进入奖品页面查看奖品详情。</div>
+			<div>活动结束后24小时内，尚未关注，奖品将自动失效。</div>
+			<div class="qrcode">
+				<img :src="gzQrcode" alt="">
+				<div>长按识别二维码</div>
+			</div>
+		</div>
+	</div>
+	<!-- 底部滑动箭头 -->
+	<div id="giftcenter-arrow-down" :class="currentStatus == 'wait' ? 'hidden' : ''">
+		<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-arrow-down.png" alt="" class="animated slideInDown">
+	</div>
+    <!-- 查看兑换二维码 -->
+	<div class="gift-qrcode-container animated" v-show="showGiftQrCode" transition="slide">
+		<div id="gift-qrcode"></div>
+		<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-gift-qrcode-close.png" id="gift-qrcode-close" v-tap.prevent="hideGiftCode">
+	</div>
+</div>
+</div>
+
+
+<!-- ******************** 蒙版 ******************** -->
+
+<!-- 分享蒙版 -->
+<div v-show="show" id="mask-share" v-tap.prevent="hide" v-cloak>
+	<!-- <div class="shareLabel main-color" :style="textColor">{{ text }}</div>
+	<div class="arrow-container">
+		<img src="//24haowan-cdn.shanyougame.com/public/images/t/arrow-share.png">
+		<div>点击右上角即可分享给好友</div>
+	</div> -->
+	<img src="//24haowan-cdn.shanyougame.com/public/images/t/share.gif" class="share-gif">
+</div>
+
+<!-- 旋转蒙版 -->
+<div id="mask-rotate" v-show="show" v-cloak></div>
+
+<!-- 暂停蒙版 -->
+<div id="mask-pause" v-tap.prevent="resume" v-show="show" v-cloak><div class="pause-mask-cnt">{{ text }}</div></div>
+
+<!-- 悬浮按钮提示遮罩 -->
+<div id="mask-btn" v-show="show" v-cloak>
+	<div class="text-container">
+		<p>小贴士：点击这里可以查看活动规则、活动奖品、报名信息、排行榜等信息。</p>
+	</div>
+	<div class="img-container">
+		<div class="img-lead"></div>
+		<div class="img-star"></div>
+	</div>
+</div>
+<!-- ******************** PC访问 ******************** -->
+
+<!-- 行业案例 -->
+
+<!-- 扫码预览 -->
+<div class="preview-show-qrcode" style="display:none;">
+	<div>扫码预览</div>
+	<img src="//24haowan-cdn.shanyougame.com/public/images/web/icon-show-qrcode-light-gray.png" class="preview-show-qrcode-img">
+</div>
+
+<!-- 提示框（PC端） -->
+<div class="remind-container" style="display:none;" id="remind-container">
+	<div class="remind-div">
+		<img id="remind-loading" src="//24haowan-cdn.shanyougame.com/public/images/web/icon-loading.gif" class="hidden"></img>
+		<div id="remind-text"></div>
+	</div>
+</div>
+
+<!-- 二维码（在PC端显示，并且只能用手机体验的才会显示） -->
+<div class="preview-qrcode-container">
+	<img src="">
+	<p></p>
+    <button class="btn btn-g btn-l"><a href="">下载二维码</a></button>
+</div>
+<!-- ******************** 游戏界面 ******************** -->
+
+<!-- 闪屏 -->
+<div
+	id="view-splash"
+	v-show="show"
+	class="animated"
+	:class="out ? 'fadeOut' : ''">
+	<div
+		class="splash animated fadeIn"
+		v-show="showLogo">
+		<div class="splash__top">
+		    <img
+				src="//24haowan-cdn.shanyougame.com/public/images/t/splash/static.png"
+		    	class="splash__static animated fadeIn"
+		    	v-cloak></img>
+		    <img
+				src="//24haowan-cdn.shanyougame.com/public/images/t/splash/dynamic.png"
+		    	class="splash__dynamic animated"
+		    	v-show="showLogo"
+		    	v-cloak></img>
+		    <img
+				src="//24haowan-cdn.shanyougame.com/public/images/t/splash/dialog.png"
+		    	class="splash__dialog animated zoomIn"
+		    	v-show="showLogo"
+		    	v-cloak></img>
+		    <img
+				src="//24haowan-cdn.shanyougame.com/public/images/t/splash/rocket.png"
+		    	class="splash__rocket animated slideInUp"
+		    	v-show="showLogo"
+		    	v-cloak></img>
+		</div>
+		<div class="splash__bottom">
+		    <img
+		    	src="//24haowan-cdn.shanyougame.com/public/images/t/splash/text.png"
+		    	class="splash__text animated zoomIn"
+		    	v-show="showLogo"
+		    	v-cloak></img>
+		</div>
+	</div>
+	<div
+		class="animated fadeIn customImg"
+		v-show="showCustomImg"
+		:style="customImg">
+	</div>
+</div>
+
+<!-- 加载页面 -->
+<div id="view-loading" v-show="show" :style="currentBackground+';'+display" data-name="loading">
+	<div class="box">
+        <div class="banner" :style="bannerBg"></div>
+        <div v-show="showProgress" class="progress">
+			<div class="bar" :style="barWidth+';'+barColor"></div>
+		</div>
+	</div>
+</div>
+
+<!-- 开始游戏界面 -->
+<div id="view-start" :style="currentBackground+';'+display" v-cloak>
+	<!-- 最好成绩 -->
+	<div class="best-score-container" :class="disableRank ? 'disabled' : ''" v-show="showBestScore" v-tap.prevent="showRank">
+		<div class="best-score">
+			<span class="score-icon" id="start-rank-btn">
+				<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-rank-circle.png" alt="">
+			</span>
+			<span class="score-text">最好成绩:
+				<span class="score">{{ bestScore + (gameType == 4 || gameType == 6 ? '关' : '') }}</span>
+				<span class="score-text-rank" v-show="!disableRank">第{{ bestRank }}名</span>
+			</span>
+		</div>
+	</div>
+	<!-- 静音按钮 -->
+	<div class="music-btn" v-show="showMusicBtn" v-tap.prevent="toggleMusic">
+		<img :src="musicOn" alt="" v-show="enableMusic">
+		<img :src="musicOff" alt="" v-show="!enableMusic">
+	</div>
+    <div class="test-remind-div" v-show="showTestRemind">测试版本，请勿外传。
+		<!-- <img class="test-remind-close" v-tap.prevent="hideTestRemind" src="//24haowan-cdn.shanyougame.com/public/images/t/icon-close-white.png"> -->
+	</div>
+	<!-- 内容 -->
+	<div class="body">
+		<div class="custom-container">
+			<div class="game-title game-title-color" :style="gameTitleImg+';'+gameTitleColor">{{ gameTitleText }}</div>
+		</div>
+		<div class="game-start-btn" @touchstart="startGame" :style='btnStartStyle'>{{ btnTextStart }}</div>
+		<div v-if="showBtnRecord" class="game-start-btn main-color deputy-btn" v-tap.prevent="myRecord" style="margin-top:10px;">{{ btnTextRecord }}</div>
+	</div>
+	<!-- 底部 -->
+    <a class="foot" :href="bottomLink" :style="bottomColor+';'+showBottom">{{ bottomText }}</a>
+</div>
+
+<!-- 结束页面 -->
+<div id="view-over" :style="currentBackground+';'+display" v-cloak>
+	<!-- 最好成绩 -->
+	<div class="best-score-container" :class="disableRank ? 'disabled' : ''" v-show="showBestScore" v-tap.prevent="showRank">
+		<div class="best-score">
+			<span class="score-icon" id="start-rank-btn">
+				<img src="//24haowan-cdn.shanyougame.com/public/images/t/icon-rank-circle.png" alt="">
+			</span>
+			<span class="score-text">最好成绩:
+				<span class="score">{{ bestScore + (gameType == 4 || gameType == 6 ? '关' : '') }}</span>
+				<span class="score-text-rank" v-show="!disableRank">第{{ bestRank }}名</span>
+			</span>
+		</div>
+	</div>
+	<!-- 静音按钮 -->
+	<div class="music-btn" v-show="showMusicBtn" v-tap.prevent="toggleMusic">
+		<img :src="musicOn" alt="" v-show="enableMusic">
+		<img :src="musicOff" alt="" v-show="!enableMusic">
+	</div>
+    <div class="test-remind-div" v-show="showTestRemind">测试版本，请勿外传。
+		<!-- <img class="test-remind-close" v-tap.prevent="hideTestRemind" src="//24haowan-cdn.shanyougame.com/public/images/t/icon-close-white.png"> -->
+	</div>
+	<!-- 内容 -->
+	<div class="body">
+		<div class="custom-container">
+			<!-- 得分类 -->
+			<template v-if="type == 'score'">
+				<div class="game-score-box">
+					<div class="centerBox">
+						<p class="scoreLabel">分数</p>
+						<p class="score">{{ gameScore }}</p>
+					</div>
+				</div>
+			</template>
+			<!-- 通关类 -->
+			<template v-if="type == 'level'">
+				<div class="gameover-text">{{ gameOverText }}</div>
+			</template>
+			<!-- 抽奖类 -->
+			<template v-if="type == 'lottery'">
+				<!-- 抽中了 -->
+				<div class="gift-has-container" v-show="hasGotGift">
+					<div class="game-img" v-tap.prevent="showGift">
+						<img :src="currentGiftImg" alt="">
+						<!--<img src="https://img-2.24haowan.shanyougame.com/img/22424/22424150060788582003.png" alt="">-->
+					</div>
+					<div class="text-container">
+						<div class="game-over-text">
+							<span>恭喜获得</span>
+							<span class="game-over-text-gift-name">{{ currentGiftName }}</span>
+						</div>
+						<div class="game-over-gift-remind">点击奖品图片查看详情</div>
+					</div>
+				</div>
+				<!-- 没抽中 -->
+				<div class="gift-empty-container" v-show="!hasGotGift">
+					<div class="game-img" v-tap.prevent="showGift"><img src="//24haowan-cdn.shanyougame.com/dingzhi/grid-lottery/result-empty.png"></div>
+					<div class="text-container">
+						<div class="game-over-text">真可惜，没有获奖！</div>
+					</div>
+				</div>
+			</template>
+			<!-- 生成类 -->
+			<!-- 测试类 -->
+			<!-- 结束页面提示 -->
+			<div class="gameover-remind-share hidden"></div>
+			<div class="gameover-remind hidden"></div>
+		</div>
+		<!-- 再玩一次按钮 -->
+		<div class="play-again-btn" v-tap.prevent="replay" :style='btnAgainStyle'>{{ btnTextReplay }}</div>
+		<!-- 抽奖按钮（非抽奖类才会有） -->
+		<div class="lottery-btn" v-show="showLotteryBtn" v-tap.prevent="lottery" :style='btnLotteryStyle'>{{ btnTextLottery }}</div>
+		<!-- 自定义按钮（工作台开启才会有）-->
+		<div class="custom-btn" v-show="showCustomBtn" v-tap.prevent="customLink" :style='btnCustomStyle'>{{ btnTextCustom }}</div>
+	</div>
+	<!-- 底部 -->
+    <a class="foot" :href="bottomLink" :style="bottomColor+';'+showBottom">{{ bottomText }}</a>
+</div>
+
+<!-- ******************** 公共js ******************** -->
+
+<script type="text/javascript">
+	var global_version = $("#data-version").data('version');
+	var gIsSentGift = $("#data-is-send-gift").data('is-send-gift');
+    // 定制全局属性
+    var customProperties = {
+        hideSupport: false, // 隐藏24好玩提供技术支持
+    };
+
+    // 需要测试的游戏
+    var test_games = ["1177101654","330725328"];
+    // 是否启用广告
+    var showAd = false;
+	// 所有页面共用的数据
+	// 游戏窗口大小
+	var game_width = (window.innerWidth > 700) ? container_width : window.innerWidth;
+	var game_height = (window.innerWidth > 700) ? container_width/(300/500) : window.innerHeight;
+	// 是否跳过开始界面并自动循环
+	var skip = location.search.indexOf("skip=") > -1;
+	// 是否为演示模式
+	var preview = location.search.indexOf("preview=") > -1;
+	// 密钥
+	var enterKey = location.search.indexOf("key") > -1 ? location.search.match(/key\=\w+/)[0].split("key=")[1] : null;
+    // 是否为第三方APP模式
+    var isAPP = false;
+	// 是否为案例
+	var case_tag = location.search.indexOf("case=") > -1;
+	// 是否为测试模式
+	var game_test = /\/webcustom\//gi.test(location.href);
+	// 提交分数地址
+	var commitScoreUrl = "";
+	// 是否播放音乐
+	var music_flag = true;
+	// 游戏ID
+	var game_id = location.href.match(/game_id\/\d+/)[0].split("/")[1];
+	// 是否第一次游戏
+	var first_play = true;
+	// 最佳成绩
+	var bestScore = 0;
+	// 是否已经获得了奖品
+	var gift_flag = false;
+	// 是否提交过表单信息
+	var form_info = 0;
+	// 表单信息
+	var form_data = {};
+	// 用户ID
+	var userId = -1;
+	// 游戏次数
+	var play_times = 0;
+	// 限制游戏次数
+	var limit_times = 1;
+	// 剩余游戏次数
+	var left_times = 1;
+	// 最佳排名
+	var best_rank = 1;
+	// 分享次数
+	var share_times = 0;
+	// 用户昵称
+	var user_name = "蔡包";
+	// 用户头像
+	var headimgurl = "";
+	// 砍价ID
+	var cd_id = 0;
+    // 如果用户用手机号注册，则app_uid的值为手机号
+    // 用于在订阅表单中填入默认手机号
+    var app_uid = '';
+	if (/\/cd_id\//.test(location.href)) cd_id = location.href.match(/\/cd_id\/\d+/)[0].split("/cd_id/")[1];
+    cd_id = location.search.indexOf("cd_id=") > -1 ? location.search.match(/cd_id\=\d+/)[0].split("cd_id=")[1] : cd_id;
+
+	// 获取公共参数
+	function getPublicData() {
+		$.ajax({
+			url: "/game/gameAjax/GetPublicParam",
+			async: false,
+			dataType: 'json',
+			type: 'POST',
+			data: {url: location.href},
+			success: function(result) {
+				var data = result.data;
+				window.basicUrl = data.basic_url; // 基础路径
+				window.version = data.version; // 版本号
+				window.internal = data.internal; // 是否为内网
+				window.isAPP = data.is_app; // 是否为APP访问
+				window.commitScoreUrl = data.commit_score_url; // 提交分数地址
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 获取分享链接和测试用户列表
+	function getShareData() {
+		$.ajax({
+			url: "/game/gameAjax/GetUrlAndList",
+			async: false,
+			dataType: 'json',
+			type: 'POST',
+			data: {url: location.href},
+			success: function(result) {
+				var data = result.data;
+				window.share_link = data.share_game_url; // 分享链接域名
+				window.testUserList = data.test_user_list; // 测试用户列表
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 获取游戏信息
+	function getGameInfo() {
+		$.ajax({
+			url: "/game/gameAjax/getPublicViewParams",
+			async: false,
+			dataType: 'json',
+			type: 'POST',
+			data: {game_id: game_id, isTest: game_test ? 1 : 0},
+			success: function(result) {
+				var data = result.data;
+				if (result.code == 0) {
+					window.tpl_info = JSON.parse(data.tpl_info); // 模板信息
+					window.game_type = Number(tpl_info.type); // 游戏类型
+					window.tpl_id = Number(tpl_info.tpl_id); // 游戏类型
+					window.game_info = JSON.parse(data.game_info); // 游戏信息
+					window.game_test = /\/webcustom\//gi.test(location.href) && game_info.status != "wait";
+					window.gift_config = data.gift_config ? JSON.parse(data.gift_config) : []; // 奖品配置
+					if (!(gift_config instanceof Array)) gift_config = [];
+					window.cd_config = data.cd_config || {total: 300, interval: [10, 20], time: 48}; // 助力配置信息
+					window.enter_key = data.enter_key; // 访问密钥
+					window.subscribe_key = data.subscribe_key; // 关键词
+					window.gz_qr_code = data.gz_qr_code; // 公众号二维码
+					getConfigJson();
+                    if (tpl_id === 55 || tpl_id === 114) {
+                        getColWordsConfig();
+					}
+					getSplashUrl();
+					getthirdLoginConfig();
+                    window.sp = data.account_role == 'sp';
+                    window.spCase = location.search.indexOf('scene=sp') > -1;
+                    // 服务商去掉商户名称
+                    if (spCase) {
+                        game_info.m_name = null;
+                        showAd = false;
+                        configJson["activity-qrcode-show"] = false;
+                    }
+                    /**-----------------------
+                     *
+                     * 替换游戏中24好玩的商标
+                     *
+                     -----------------------*/
+                    if (window.game_info.agent_id == 22) { // 旺猫
+                        // 活动中心 - 技术支持
+                        window.activityTechSupport = '由旺猫提供技术支持';
+                        // 活动中心 - 商户名称
+                        window.activityMName = '旺猫';
+                        // 闪屏图片
+                        window.splashImg = '//img-2.24haowan.shanyougame.com/img/32/32150287040073416.png';
+                        // 底部横幅
+                        window.bottomText = '旺猫';
+                        // 底部链接
+                        window.bottomLink = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6a41a166b2de4818&redirect_uri=http://www.wmallcity.com/webapp/indexmall.do?accountId=71&response_type=code&scope=snsapi_base&state=1#wechat_redirect';
+                        // 加载页横幅
+                        window.loadingBanner = '//img-2.24haowan.shanyougame.com/img/32/32150287401046912.png';
+                        // 公众号二维码
+                        window.activityQrcode = '//img-2.24haowan.shanyougame.com/img/32/32150302348479650.jpg';
+                    } else { // 24好玩
+                        // 活动中心 - 技术支持
+                        window.activityTechSupport = '由24好玩提供技术支持';
+                        // 活动中心 - 商户名称
+                        window.activityMName = '24好玩';
+                        // 闪屏图片
+                        window.splashImg = undefined;
+                        // 底部横幅
+                        window.bottomText = '用24好玩免费生成刷屏互动H5';
+                        // 底部链接
+                        window.bottomLink = 'https://www.24haowan.com/pages/index-mob.html?utm_source=24ad&utm_medium=games';
+                        // 加载页横幅
+                        window.loadingBanner = '//24haowan-cdn.shanyougame.com/new_platform/image/loadingBanner.png';
+                        // 公众号二维码
+                        window.activityQrcode = '//24haowan-cdn.shanyougame.com/game_tpl/activity-qrcode.jpg';
+                    }
+
+				}
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 获取游戏配置表
+	function getConfigJson() {
+		$.ajax({
+			url: game_info['platform_config'].replace("https://www.24haowan.com", location.origin),
+			async: false,
+			dataType: 'json',
+			type: 'GET',
+			success: function(data) {
+				window.configJson = data;
+				console.log(data);
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+    // 获取集字模板的配置信息
+    function getColWordsConfig() {
+            $.ajax({
+                url: '/game/v1/saveWordsConfig',
+                async: false,
+                dataType: 'json',
+                type: 'GET',
+                data: {
+                    game_id: game_info.game_id
+                },
+                success: function(res) {
+                    if (res.code === 0) {
+                        var data = res.data;
+                        configJson['disable-rank'] = data.view_rank == 1 ? false : true;
+                        window.isShowPeopleNum = data.view_sum_numbers == 1 ? true : false;
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    }
+
+	// 获取广告闪屏图片
+	function getSplashUrl() {
+		$.ajax({
+			url: "/game/V1/SplashConfig",
+			async: false,
+			dataType: 'json',
+			type: 'GET',
+			data: {
+				game_id: game_info.game_id
+			},
+			success: function(result) {
+				window.vipSplashImg = result.data;
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 获取用户绑定配置
+	function getthirdLoginConfig() {
+		$.ajax({
+			url: "/game/V1/thirdLoginConfig",
+			async: false,
+			dataType: 'json',
+			type: 'GET',
+			data: {
+				game_id: game_info.game_id
+			},
+			success: function(result) {
+				window.thirdLoginData = result.data;
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 获取用户数据
+	function getUserData() {
+		$.ajax({
+			url: "/game/v1/userViewParams",
+			async: false,
+			dataType: 'json',
+			type: 'POST',
+			data: {game_id: game_id, isTest: game_test ? 1 : 0, key: enterKey},
+			success: function(result) {
+				var data = result.data;
+				if (result.code == 0) {
+					window.first_play = data.first_play; // 是否第一次玩游戏
+					window.bestScore = Number(data.best_score); // 最高分数
+					window.gift_flag = data.gift_flag; // 是否领取过奖品
+					window.form_info = data.form_info ? 1 : 0; // 是否已填写报名信息
+					window.form_data = JSON.parse(data.form_info) || {}; // 报名信息
+					window.userId = data.user_id; // 用户ID
+					window.openid = data.openid; // openid
+					window.play_times = data.play_times; // 游戏次数
+					// 游戏次数
+					var limit_times = data.limit_times;
+					game_info.limit_times = limit_times;
+					window.left_times = game_info.limit_times == -1 ? -1 : (game_info.limit_times-play_times); // 剩余游戏次数
+					window.best_rank = data.rank || 1; // 当前排名
+					window.share_times = data.share_times; // 分享次数
+					window.user_name = data.user_name; // 用户昵称
+					window.headimgurl = data.headimgurl; // 用户头像
+					window.app_uid = data.app_uid; // 获取手机号登陆用户的手机号
+				}
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 推送用户数据
+	function sendUserData() {
+		$.ajax({
+			url: "/game/V1/sendUserInfo",
+			async: false,
+			dataType: 'json',
+			type: 'get',
+			data: {game_id: game_id},
+			success: function(result) {
+				var data = result.data;
+				if (result.code == 0) {
+					console.log('ok');
+				} else if(result.code == -3) {
+					console.log('not ok')
+				}
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	}
+
+	// 获取数据
+	getPublicData();
+	getShareData();
+	getGameInfo();
+
+
+	// 工作台，自动选择角色并进入游戏
+	if (skip && game_info["status"] == "wait") {
+		// 发送信息
+        $.ajax({
+            url: "/gameAjax/testUserLogin",
+            data: {game_id: game_info['game_id'], user_id: -6},
+            async: false,
+            type: "POST",
+            success: function(result) {
+                result = JSON.parse(result);
+                if (result['code'] == 0) {
+                    $(".role-container").remove();
+                    getUserData();
+                } else if (result['code'] == -1) {
+                	showRemind("活动已发布，不能进去测试模式");
+                } else if (result['code'] == -2) {
+                	showRemind("系统错误");
+                } else if (result['code'] == -3) {
+                	showRemind("系统错误");
+                }
+            },
+            error: function(err) {
+                showRemind("网络连接错误");
+            }
+        });
+	} else if (!game_test && game_info.status != "wait") {
+		getUserData();
+		sendUserData();
+	}
+
+	// 查询用户是否订阅了通知
+    function getSubscriptionInfo() {
+        $.ajax({
+            url: '/game/V1/subscribeMessage',
+            data: {
+                game_id: game_id
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if (res.code === 0) {
+					// 是否订阅
+					// 也用于表示是否弹出订阅模态框，主要是为了在用户点击了提示订阅和订阅模态框的“不用了”按钮之后，不在提示订阅
+                    window.isSubscribed = res.data === 'yes' ? true : false;
+                } else {
+                    window.isSubscribed = false;
+                }
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+    getSubscriptionInfo();
+</script>
+		<div id="game_div"></div>
+		<script src="//24haowan-cdn.shanyougame.com/public/js/phaser.min.js"></script>
+		<script type="text/javascript" src="//res.cdn.24haowan.com/24haowan/js/eliminate/main.js?v=1518300471"></script>
+	</div>
+</body>
+</html>
