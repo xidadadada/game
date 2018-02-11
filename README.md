@@ -1,2 +1,2 @@
-# edu
-hot edu 
+# game
+hot game
